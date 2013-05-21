@@ -1,5 +1,7 @@
 describe("Move to library", function() {
 
+	var Mtl = require("MoveToLibrary");
+	var _ = require("underscore");
 	var inputDir =  [
 					"Chuck 3x7.wmv",
 	            	"Chuck 03 x 20.wmv",
@@ -26,8 +28,7 @@ describe("Move to library", function() {
 
 	var outputDir = ["Chuck", "Community", "Mad Men", "Doctor Who (2005)"];
 
-	var validVideos = inputDir.slice(0, inputDir.length-3);
-
+	var validVideos = inputDir.slice(0, inputDir.length-2).sort();
 	var operations = {
 		"Chuck" : [
 					"Chuck 3x7.wmv",
@@ -58,7 +59,6 @@ describe("Move to library", function() {
 		]
 	};
 
-	var Mtl = require("MoveToLibrary");
 	var instance;
 
 	beforeEach(function() {
@@ -67,7 +67,23 @@ describe("Move to library", function() {
 
 
 	it("should correctly identify tagged videos", function() {
-		expect(Mtl.identifyVideos(inputDir).join()).toBe(validVideos.join());
+		var vids = _.keys(Mtl.identifyVideos(inputDir)).sort();
+		for (var k in validVideos) {
+			expect(vids).toContain(validVideos[k]);	
+		}
+		expect(_.isEqual(vids, validVideos)).toBeTruthy();
+	});
+
+	it("should match files to likely target directories", function() {
+		var ops = Mtl.identifyDestinations(Mtl.identifyVideos(inputDir), outputDir);
+		var match = _.isEqual(ops, operations);
+		if (!match) {
+			console.info("\n");
+			console.info(ops);
+			console.info("DOES NOT EQUAL");
+			console.info(operations);
+		}
+		expect(match).toBeTruthy();
 	});
 
 });

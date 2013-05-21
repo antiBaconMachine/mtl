@@ -1,6 +1,6 @@
 describe("Move to library", function() {
 
-	var Mtl = require("MoveToLibrary");
+	var mtl = require("MoveToLibrary");
 	var _ = require("underscore");
 	var inputDir =  [
 					"Chuck 3x7.wmv",
@@ -59,15 +59,9 @@ describe("Move to library", function() {
 		]
 	};
 
-	var instance;
-
-	beforeEach(function() {
-		instance = new Mtl();
-	});
-
 
 	it("should correctly identify tagged videos", function() {
-		var vids = _.keys(Mtl.identifyVideos(inputDir)).sort();
+		var vids = _.keys(mtl.identifyVideos(inputDir)).sort();
 		for (var k in validVideos) {
 			expect(vids).toContain(validVideos[k]);	
 		}
@@ -75,7 +69,7 @@ describe("Move to library", function() {
 	});
 
 	it("should match files to likely target directories", function() {
-		var ops = Mtl.identifyDestinations(Mtl.identifyVideos(inputDir), outputDir);
+		var ops = mtl.identifyDestinations(mtl.identifyVideos(inputDir), outputDir);
 		var match = _.isEqual(ops, operations);
 		if (!match) {
 			console.info("\n");

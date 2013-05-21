@@ -3,3 +3,4 @@ node_modules/.bin
 *.swp
 node_modules/optimist
 node_modules/underscore
+node_modules/request

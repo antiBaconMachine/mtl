@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 var fs = require("fs");
 var mtl = require("MoveToLibrary");
 var _ = require("underscore");
@@ -23,6 +25,10 @@ var argv = require("optimist").
 					alias : "source",
 					demand : true,
 					describe : "source dir"
+				},
+				'x' : {
+					alias : 'update-xbmc',
+					describe : 'url of xbmc remote interface to tirgger update of lib'
 				}
 			}).
 			argv;
@@ -37,8 +43,9 @@ if (argv.p) {
 	ask("proceed?", /(y|n)/i, function(resp) {
 		if (resp.toLowerCase() === "y") {
 			complete();
+		} else {
+			process.exit();
 		}
-		process.exit();
 	});
 } else {
 	complete();
@@ -46,7 +53,11 @@ if (argv.p) {
 
 function complete() {
 	mtl.doOps(source, dest, ops);
-	process.exit();
+	if(argv.x) {
+		mtl.refreshXBMC(argv.x, process.exit);
+	 } else {
+		process.exit();
+	 }
 }
 
 function ask(question, format, callback) {

@@ -1,3 +1,5 @@
 node_modules/jasmine-node
 node_modules/.bin
 *.swp
+node_modules/optimist
+node_modules/underscore

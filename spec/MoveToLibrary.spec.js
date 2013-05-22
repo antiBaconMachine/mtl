@@ -54,6 +54,7 @@ describe("Move to library", function() {
 		"Mad Men" : [
 					"Mad.Men.S06E08.HDTV.x264-EVOLVE.mp4",
 		],
+		'Game of Thrones': [ 'Game.of.Thrones.S03E08.PROPER.HDTV.x264-2HD.mp4' ],
 		"Doctor Who (2005)" : [
 					"Doctor.Who.2005.7x12.Nightmare.In.Silver.HDTV.x264-FoV.mp4",
 		]

@@ -1,6 +1,6 @@
 describe("Move to library", function() {
 
-	var mtl = require("MoveToLibrary");
+	var mtl = require("../moveToLibrary");
 	var _ = require("underscore");
 	var inputDir =  [
 					"Chuck 3x7.wmv",
@@ -26,7 +26,7 @@ describe("Move to library", function() {
 					"NotAvideo.txt",
 					"video_wthout_tags.mp4"]
 
-	var outputDir = ["Chuck", "Community", "Mad Men", "Doctor Who (2005)"];
+	var outputDir = ["Chuck", "Community", "Mad Men","Doctor Who (2005)"];
 
 	var validVideos = inputDir.slice(0, inputDir.length-2).sort();
 	var operations = {

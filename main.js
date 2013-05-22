@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 var fs = require("fs");
-var mtl = require("MoveToLibrary");
+var mtl = require("moveToLibrary");
 var _ = require("underscore");
 var argv = require("optimist").
 			usage("File TV shows in appropriate folders\n Usage: $0 -options -s=path/to/source/folder -d=path/to/destination/folder").

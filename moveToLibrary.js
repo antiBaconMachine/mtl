@@ -7,13 +7,14 @@ var PATTERNS = [
 	/(.*)\W+S?([0-9]{1,2})X?\W*?E([0-9]{1,2}).*\.(.+$)/i,
 	/(.*)\W+([0-9]{1,2})\W*?x\W*?([0-9]{1,2}).*\.(.+$)/i
 ]
+var SPLIT_WORDS_REGEX = /\W+/g;
 var regexes = {};
 var matchTitles = {};
 
 var getRegex = function(title) {
 	var r  = regexes[title];
 	if (!r) {
-		r = new RegExp("^" + title.split(/\W/g).join("\\W") + ".*", "i");
+		r = new RegExp("^" + title.split(SPLIT_WORDS_REGEX).join("\\W") + ".*", "i");
 		regexes[title]=r;
 	}
 	return r;
@@ -21,12 +22,16 @@ var getRegex = function(title) {
 var getMatchTitle = function(title) {
 	var m = matchTitles[title];
 	if (!m) {
-		m = getCleanTitle(title); 
+		m = title.split(SPLIT_WORDS_REGEX).join(" "); 
 		matchTitles[title] = m;
 	}
 	return m;
 }
-var getCleanTitle = function(title) {
+/**
+ *Get a nice clean name your grandma would be happy to use as a directory name.
+ *allows ()
+ */
+var getDirTitle = function(title) {
 	return title.split(/[^a-zA-Z0-9\(\)]+/g).join(" ");
 }
 
@@ -93,13 +98,12 @@ identifyDestinations : function(videos, target) {
 			var matchTitle = getMatchTitle(t);
 			var test = regex.test(matchTitle);
 			//console.info("matching %s with pattern -%s- against -%s- with result %s",filename, matchTitle,regex,test);
-			//console.info(test, meta.format, meta.format === "mkv");
 			if (test) {
 				dirName = t;
 				break;
 			}
 		}
-		dirName = dirName || getCleanTitle(meta.title);
+		dirName = dirName || getDirTitle(meta.title);
 		ops[dirName] = ops[dirName] || [];
 		ops[dirName].push(filename);
 	}

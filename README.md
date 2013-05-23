@@ -20,5 +20,9 @@ To trigger an xbmc library scan after moving pass `-x http://yourxbmcurl:port`. 
 
 ##Show identification
 
-This based on a simple and limited set of regexes to match a few files I had lying around plus some sample names which are detailed in the spec. It is by no means comprehensive but will hopefully grow over time. I welcome helpful contributions.
+This based on a simple and limited set of regexes to match a few files I had lying around plus some sample names which are detailed in the spec. It is by no means comprehensive but will hopefully grow over time. I welcome helpful contributions. The regex list can easily be edited in patterns.js
 
+##Changelog
+
+###0.0.1 2013-05-23
+* externalised regexes

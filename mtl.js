@@ -2,11 +2,8 @@ var _ = require("underscore");
 var fs = require("fs");
 var path = require("path");
 var request = require("request"); 
+var PATTERNS = require("./patterns");
 
-var PATTERNS = [
-	/(.*)\W+S?([0-9]{1,2})X?\W*?E([0-9]{1,2}).*\.(.+$)/i,
-	/(.*)\W+([0-9]{1,2})\W*?x\W*?([0-9]{1,2}).*\.(.+$)/i
-]
 var SPLIT_WORDS_REGEX = /\W+/g;
 var regexes = {};
 var matchTitles = {};

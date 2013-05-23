@@ -9,8 +9,8 @@ Clone the repo then run `npm install -g` from the repo root. You now have the mt
 
 ##usage
 
-Only required arguments are a source dir to scan and a dest dir to file videos under. 
-	mtl -s Downloads -d ~/Videos/TV
+Only required arguments are a source dir to scan and a dest dir to file videos under.
+    mtl -s Downloads -d ~/Videos/TV
 
 by default mtl will print a list of identified files and the folders it intends to move them to and prompt for further action. If no suitable folder exists one will be created. If you are happy with what it intends to do then hiy `y`y and you're done.
 

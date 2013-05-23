@@ -1,0 +1,30 @@
+{
+  "name": "mtl",
+  "version": "0.0.0",
+  "description": "Utility for filing TV shows into a sorted library based on metadata from filenames",
+  "main": "mtl.js",
+  "bin" :  "./cli.js",
+  "dependencies": {
+    "optimist": "~0.5.0",
+    "request": "~2.21.0",
+    "underscore": "~1.4.4"
+  },
+  "devDependencies": {
+  	"jasmine-node" : "~1.7.1"
+  },
+  "scripts": {
+    "test": "jasmine-node spec/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antiBaconMachine/mtl.git"
+  },
+  "keywords": [
+    "TV",
+    "xbmc",
+    "regex"
+  ],
+  "author": "Ollie Edwards <oliver.s.edwards+mtl@gmail.com>",
+  "license": "BSD",
+  "gitHead": "594936efdbf6fce7f13b60f4671ef760e67691a4"
+}

@@ -1,6 +1,6 @@
 describe("Move to library", function() {
 
-	var mtl = require("../moveToLibrary");
+	var mtl = require("../mtl");
 	var _ = require("underscore");
 	var inputDir =  [
 					"Chuck 3x7.wmv",

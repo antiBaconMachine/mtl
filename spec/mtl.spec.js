@@ -29,7 +29,7 @@ describe("Move to library", function() {
 	var outputDir = ["Chuck", "Community", "Mad Men","Doctor Who (2005)"];
 
 	var validVideos = inputDir.slice(0, inputDir.length-2).sort();
-	var operations = {
+	var moves = {
 		"Chuck" : [
 					"Chuck 3x7.wmv",
 	            	"Chuck 03 x 20.wmv",
@@ -54,12 +54,13 @@ describe("Move to library", function() {
 		"Mad Men" : [
 					"Mad.Men.S06E08.HDTV.x264-EVOLVE.mp4",
 		],
-		'Game of Thrones': [ 'Game.of.Thrones.S03E08.PROPER.HDTV.x264-2HD.mp4' ],
 		"Doctor Who (2005)" : [
 					"Doctor.Who.2005.7x12.Nightmare.In.Silver.HDTV.x264-FoV.mp4",
 		]
 	};
-
+	var createDirs = {
+		'Game of Thrones': [ 'Game.of.Thrones.S03E08.PROPER.HDTV.x264-2HD.mp4' ]
+	}
 
 	it("should correctly identify tagged videos", function() {
 		var vids = _.keys(mtl.identifyVideos(inputDir)).sort();
@@ -69,16 +70,19 @@ describe("Move to library", function() {
 		expect(_.isEqual(vids, validVideos)).toBeTruthy();
 	});
 
-	it("should match files to likely target directories", function() {
+	it("should match files to likely existing target directories, and suggest reasonable defaults for new dirs", function() {
 		var ops = mtl.identifyDestinations(mtl.identifyVideos(inputDir), outputDir);
-		var match = _.isEqual(ops, operations);
+		var theMoves = ops.move;
+		var theCreateDirs = ops.create;
+		var match = _.isEqual(theMoves, moves);
 		if (!match) {
 			console.info("\n");
-			console.info(ops);
+			console.info(theMoves);
 			console.info("DOES NOT EQUAL");
-			console.info(operations);
+			console.info(moves);
 		}
 		expect(match).toBeTruthy();
+		expect(_.isEqual(theCreateDirs, createDirs)).toBeTruthy();
 	});
 
 });

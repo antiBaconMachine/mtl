@@ -44,7 +44,7 @@ getOps : function(source, target, options) {
 	});
 	return mtl.identifyDestinations(videos, targets);
 },
-doOps : function(source, target, ops) {
+doMoves : function(source, target, ops) {
 	if (!ops) throw "no ops provided";
 	for (var dir in ops) {
 		var dirPath = path.join(target,dir);
@@ -85,7 +85,8 @@ identifyVideos : function(files) {
 	return output;
 },
 identifyDestinations : function(videos, target) {
-	var ops = {};
+	var moves = {};
+	var createDirs = {};
 	for (var filename in videos) {
 		var meta = videos[filename];
 		var regex = getRegex(meta.title);
@@ -100,11 +101,20 @@ identifyDestinations : function(videos, target) {
 				break;
 			}
 		}
-		dirName = dirName || getDirTitle(meta.title);
-		ops[dirName] = ops[dirName] || [];
-		ops[dirName].push(filename);
+		//dirName = dirName || getDirTitle(meta.title);
+		if (dirName) {
+			moves[dirName] = moves[dirName] || [];
+			moves[dirName].push(filename);
+		} else {
+			dirName = getDirTitle(meta.title);
+			createDirs[dirName] = createDirs[dirName] || [];
+			createDirs[dirName].push(filename);
+		}
 	}
-	return ops;
+	return {
+		move : moves,
+		create : createDirs
+	}
 },
 refreshXBMC : function(url, cb) {
 	//TODO more tolerant url handling

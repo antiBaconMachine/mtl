@@ -26,7 +26,7 @@ describe("Move to library", function() {
 					"NotAvideo.txt",
 					"video_wthout_tags.mp4"]
 
-	var outputDir = ["Chuck", "Community", "Mad Men","Doctor Who (2005)"];
+	var outputDir = ["Community", "Mad Men","Doctor Who (2005)"];
 
 	var validVideos = inputDir.slice(0, inputDir.length-2).sort();
 	var moves = {
@@ -56,11 +56,10 @@ describe("Move to library", function() {
 		],
 		"Doctor Who (2005)" : [
 					"Doctor.Who.2005.7x12.Nightmare.In.Silver.HDTV.x264-FoV.mp4",
-		]
+		],
+                'Game of Thrones': [ 'Game.of.Thrones.S03E08.PROPER.HDTV.x264-2HD.mp4' ]
 	};
-	var createDirs = {
-		'Game of Thrones': [ 'Game.of.Thrones.S03E08.PROPER.HDTV.x264-2HD.mp4' ]
-	}
+	var createDirs = ['Chuck', 'Game of Thrones'];
 
 	it("should correctly identify tagged videos", function() {
 		var vids = _.keys(mtl.identifyVideos(inputDir)).sort();
@@ -74,6 +73,7 @@ describe("Move to library", function() {
 		var ops = mtl.identifyDestinations(mtl.identifyVideos(inputDir), outputDir);
 		var theMoves = ops.move;
 		var theCreateDirs = ops.create;
+                //TODO must be a better way to do deep equals
 		var match = _.isEqual(theMoves, moves);
 		if (!match) {
 			console.info("\n");
@@ -82,7 +82,14 @@ describe("Move to library", function() {
 			console.info(moves);
 		}
 		expect(match).toBeTruthy();
-		expect(_.isEqual(theCreateDirs, createDirs)).toBeTruthy();
+                match = _.isEqual(theCreateDirs, createDirs);
+                if (!match) {
+                    console.info("\n");
+                    console.info(theCreateDirs);
+                    console.info("DOES NOT EQUAL");
+                    console.info(createDirs);
+                }
+		expect(match).toBeTruthy();
 	});
         
         it("should match a single file to a target directory, new or exisiting", function() {

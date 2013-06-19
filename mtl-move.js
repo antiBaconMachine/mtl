@@ -1,41 +1,59 @@
 var fs = require("fs");
 var mtl = require("./mtl");
 var _ = require("underscore");
+var path = require("path");
 
 var argv = require("optimist").
 			usage("File TV shows in appropriate folders\n Usage: mtl move -options -s=path/to/source/folder -d=path/to/destination/folder").
 			options({
-				'd' : {
-					alias : 'destination',
+				'destination' : {
+					alias : 'd',
 					demand : true,
 					describe : "Library directory"
 				},
-				'n' : {
-					alias : 'dry-run',
+				'dry-run' : {
+					alias : 'n',
 					describe : 'print the operations that would be performed and exit',
 					default : false
 				},
-				'p' : {
-					alias : 'prompt',
+				'prompt' : {
+					alias : 'p',
 					default : true,
 					describe : "perform required ops without prompting"
 				},
-				's' : {
-					alias : "source",
+                                'quiet' : {
+                                    alias : 'q',
+                                    describe : "less output",
+                                    default : false
+                                },
+                                'rtorrent' : {
+                                    alias : 'r',
+                                    describe : 'echo the new dir of a  moved file to stdout. Only makes sense with a single file and no prompt. implies quiet and no prompt',
+                                    default : false
+                                },
+				'source' : {
+					alias : "s",
 					demand : true,
 					describe : "source dir"
 				},
-				'x' : {
-					alias : 'update-xbmc',
+				'update-xbmc' : {
+					alias : 'x',
 					describe : 'url of xbmc remote interface to tirgger update of lib'
 				}
+                                
 			}).
 			argv;
+                
+if (argv.rtorrent) {
+    argv.quiet = argv.q = true;
+    argv.prompt = argv.p = false;
+}
 
+//Source may be a directory or a single file
 var source = argv.source;
 var dest = argv.destination;
 var ops = mtl.getOps(source, dest);
-console.info(ops);
+if (!argv.quiet) console.info(ops);
 if (argv.n) process.exit();
 
 if (argv.p) {
@@ -51,7 +69,16 @@ if (argv.p) {
 }
 
 function complete() {
-	mtl.doOps(source, dest, ops);
+        var srcDir = path.dirname(source); 
+	//If there are no moves then just return the source directory 
+        //TODO at some point we may want to make a configurable default dir
+        var outp = [srcDir];
+        if (!_.isEmpty(ops.move)) {
+            outp = mtl.doMoves(srcDir, dest, ops.move);
+        }
+        if (argv.rtorrent) {
+            console.log(outp.length >1 ? outp : outp[0]);
+        }
 	if(argv.x) {
 		mtl.refreshXBMC(argv.x, process.exit);
 	 } else {

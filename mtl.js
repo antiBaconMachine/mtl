@@ -34,30 +34,35 @@ var getDirTitle = function(title) {
 
 var mtl = {
     getOps: function(source, target, options) {
+        
         return mtl.identifyDestinations(
-                mtl.identifyVideos(mtl.getFiles(source)), 
+                mtl.identifyVideos(mtl.getFiles(source)),
                 mtl.getDirs(target));
     },
     doMoves: function(source, target, ops) {
         if (!ops)
             throw "no ops provided";
+        var newDirs = [];
         for (var dir in ops) {
             var dirPath = path.join(target, dir);
+            newDirs.push(dirPath);
             if (!fs.existsSync(dirPath)) {
-                console.info("Creating directory: %s", dirPath);
+                //console.info("Creating directory: %s", dirPath);
                 fs.mkdirSync(dirPath);
             }
             var files = ops[dir];
+            //console.info("file: %j from ops %j with key %s", files, ops, dir);
             files.forEach(function(file) {
                 var sourcePath = path.join(source, file);
                 var destPath = path.join(dirPath, file);
                 if (fs.existsSync(destPath)) {
-                    console.warn("%s exists, skipping", destPath);
+                    //console.warn("%s exists, skipping", destPath);
                 } else {
                     fs.renameSync(sourcePath, destPath);
                 }
             });
         }
+        return newDirs;
     },
     /**
      * 
@@ -67,9 +72,6 @@ var mtl = {
     identifyVideos: function(files) {
         var output = {};
         //console.info("identifying files %j",files);
-        if (!files.forEach) {
-            files = [files];
-        }
         files.forEach(function(f) {
             //TODO filter filetype here
             PATTERNS.forEach(function(p) {
@@ -97,7 +99,7 @@ var mtl = {
     identifyDestinations: function(videos, target) {
         //console.info("identifying destination for vids %j in %j", videos, target);
         var moves = {};
-        var createDirs = {};
+        var createDirs = [];
         for (var filename in videos) {
             var meta = videos[filename];
             //console.info("metadata for %s : %j", filename, meta);
@@ -113,15 +115,14 @@ var mtl = {
                     break;
                 }
             }
-            //dirName = dirName || getDirTitle(meta.title);
-            if (dirName) {
-                moves[dirName] = moves[dirName] || [];
-                moves[dirName].push(filename);
-            } else {
+            if (!dirName) {
                 dirName = getDirTitle(meta.title);
-                createDirs[dirName] = createDirs[dirName] || [];
-                createDirs[dirName].push(filename);
+                if (createDirs.indexOf(dirName) < 0) {
+                    createDirs.push(dirName);
+                }
             }
+            moves[dirName] = moves[dirName] || [];
+            moves[dirName].push(filename);
         }
         return {
             move: moves,
@@ -138,11 +139,11 @@ var mtl = {
         },
         function(error, response, body) {
             if (!error && response.statusCode == 200) {
-                console.log("Triggered XBMC update");
-                console.log(body);
+                //console.log("Triggered XBMC update");
+                //console.log(body);
             } else {
-                console.log("XBMC update failed with error %s", error);
-                console.log(response);
+                console.error("XBMC update failed with error %s", error);
+                console.error(response);
             }
             if (cb)
                 cb();
@@ -154,6 +155,9 @@ var mtl = {
         });
     },
     getFiles: function(source) {
+        if (fs.statSync(source).isFile()) {
+            return [path.basename(source)];
+        } 
         return _.filter(fs.readdirSync(source), function(f) {
             return fs.statSync(path.join(source, f)).isFile();
         });

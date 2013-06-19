@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-var cmd = "./mtl-" + (process.argv[2] || "move");
+var cmd = "./mtl-" + process.argv[2];
 try {
     require(cmd);
 } catch (e) {

@@ -1,8 +1,29 @@
 #! /usr/bin/env node
-var cmd = "./mtl-" + process.argv[2];
+var AVAILABLE_SCRIPTS=["move","xbmc","target"];
+
+var argv = require("optimist").
+        usage("mtl cmd").
+        options({
+    version : {
+        alias : 'v'
+    }
+}).argv;
+
+if (argv.version) {
+    var package = require("./package");
+    console.info(package.version);
+    process.exit();
+}
+var script = argv._[1];
+if (AVAILABLE_SCRIPTS.indexOf(script) < 0) {
+    console.log("Supply a valid command %j", AVAILABLE_SCRIPTS);
+    process.exit(1);
+}
+var cmd = "./mtl-" + script;
+
 try {
     require(cmd);
 } catch (e) {
-    console.error("could not complete command %s",cmd);
+    console.error("could not complete command %s", cmd);
     throw e;
 }

@@ -33,19 +33,19 @@ var getDirTitle = function(title) {
 }
 
 var mtl = {
-    getOps: function(source, target, options) {
+    getOps: function(source, target) {
         
         return mtl.identifyDestinations(
                 mtl.identifyVideos(mtl.getFiles(source)),
                 mtl.getDirs(target));
     },
-    doMoves: function(source, target, ops) {
+    doMoves: function(source, target, ops, dry) {
         if (!ops)
             throw "no ops provided";
         var newFiles = [];
         for (var dir in ops) {
             var dirPath = path.join(target, dir);
-            if (!fs.existsSync(dirPath)) {
+            if (!dry && !fs.existsSync(dirPath)) {
                 //console.info("Creating directory: %s", dirPath);
                 fs.mkdirSync(dirPath);
             }
@@ -58,7 +58,7 @@ var mtl = {
                     //console.warn("%s exists, skipping", destPath);
                 } else {
                     newFiles.push(destPath);
-                    fs.renameSync(sourcePath, destPath);
+                    if (!dry) fs.renameSync(sourcePath, destPath);
                 }
             });
         }

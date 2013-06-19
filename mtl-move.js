@@ -54,9 +54,7 @@ var source = argv.source;
 var dest = argv.destination;
 var ops = mtl.getOps(source, dest);
 if (!argv.quiet) console.info(ops);
-if (argv.n) process.exit();
-
-if (argv.p) {
+if (!argv.n && argv.p) {
 	ask("proceed?", /(y|n)/i, function(resp) {
 		if (resp.toLowerCase() === "y") {
 			complete();
@@ -74,12 +72,12 @@ function complete() {
         //TODO at some point we may want to make a configurable default dir
         var outp = [srcDir];
         if (!_.isEmpty(ops.move)) {
-            outp = mtl.doMoves(srcDir, dest, ops.move);
+            outp = mtl.doMoves(srcDir, dest, ops.move, argv.n);
         }
         if (argv.rtorrent) {
             console.log(outp.length >1 ? outp : outp[0]);
         }
-	if(argv.x) {
+	if(!argv.n && argv.x) {
 		mtl.refreshXBMC(argv.x, process.exit);
 	 } else {
 		process.exit();

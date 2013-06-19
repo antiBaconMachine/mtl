@@ -1,16 +1,16 @@
 {
   "name": "mtl",
-  "version": "0.0.1",
+  "version": "0.0.2-beta",
   "description": "Utility for filing TV shows into a sorted library based on metadata from filenames",
   "main": "mtl.js",
-  "bin" :  "./cli.js",
+  "bin": "./cli.js",
   "dependencies": {
     "optimist": "~0.5.0",
     "request": "~2.21.0",
     "underscore": "~1.4.4"
   },
   "devDependencies": {
-  	"jasmine-node" : "~1.7.1"
+    "jasmine-node": "~1.7.1"
   },
   "scripts": {
     "test": "jasmine-node spec/"

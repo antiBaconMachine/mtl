@@ -67,6 +67,9 @@ var mtl = {
     identifyVideos: function(files) {
         var output = {};
         //console.info("identifying files %j",files);
+        if (!files.forEach) {
+            files = [files];
+        }
         files.forEach(function(f) {
             //TODO filter filetype here
             PATTERNS.forEach(function(p) {

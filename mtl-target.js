@@ -25,18 +25,32 @@ var argv = require("optimist").
 
 var source = argv.source;
 var dest = argv.destination;
-var vids = mtl.identifyVideos([path.basename(source)]);
+var vid = path.basename(source);
+var vids = mtl.identifyVideos(vid);
 //console.info("video array: %j",vids);
 var outp = argv["default"];
 if (vids) {
     var ops = mtl.identifyDestinations(vids, mtl.getDirs(dest));
     //console.info("target ops : %j",ops);
+    var obj, create;
     if (!_.isEmpty(ops.create)) {
-        outp = path.join(dest, _.keys(ops.create)[0]);
-        fs.mkdirSync(outp);
+        obj = ops.create;
+        create = true;
     } else if (!_.isEmpty(ops.move)) {
-        outp = path.join(dest, _.keys(ops.move)[0]);
+        obj = ops.move;
+        create = false;
     }
+    outp = move(source, vid, dest, _.keys(obj)[0], create);
 }
 console.log(outp);
+
+function move(sourceFile, baseName, destPath, destName, booCreate) {
+    var outp = path.join(destPath, destName);
+    if (booCreate) {
+        fs.mkdirSync(outp);
+    }
+    //console.log("moving from %s to %s",source, path.join(outp,baseName));
+    fs.renameSync(source, path.join(outp,baseName));
+    return outp;
+} 
 

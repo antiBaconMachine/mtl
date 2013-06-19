@@ -42,9 +42,10 @@ var mtl = {
     doMoves: function(source, target, ops, dry) {
         if (!ops)
             throw "no ops provided";
-        var newFiles = [];
+        var newDirs = [];
         for (var dir in ops) {
             var dirPath = path.join(target, dir);
+            newDirs.push(dirPath);
             if (!dry && !fs.existsSync(dirPath)) {
                 //console.info("Creating directory: %s", dirPath);
                 fs.mkdirSync(dirPath);
@@ -57,12 +58,11 @@ var mtl = {
                 if (fs.existsSync(destPath)) {
                     //console.warn("%s exists, skipping", destPath);
                 } else {
-                    newFiles.push(destPath);
                     if (!dry) fs.renameSync(sourcePath, destPath);
                 }
             });
         }
-        return newFiles;
+        return newDirs;
     },
     /**
      * 

@@ -14,7 +14,7 @@ if (argv.version) {
     console.info(package.version);
     process.exit();
 }
-var script = argv._[1];
+var script = argv._[0];
 if (AVAILABLE_SCRIPTS.indexOf(script) < 0) {
     console.log("Supply a valid command %j", AVAILABLE_SCRIPTS);
     process.exit(1);

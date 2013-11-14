@@ -18,6 +18,7 @@ var argv = require("optimist").
 				},
 				'prompt' : {
 					alias : 'p',
+					boolean : true,
 					default : true,
 					describe : "perform required ops without prompting"
 				},

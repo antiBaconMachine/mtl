@@ -66,11 +66,12 @@ var mtl = {
     },
     /**
      * 
-     * @param {Array} files - absolute paths to files to process
+     * @param {Array || string} files - absolute paths to file(s) to process
      * @returns {unresolved}
      */
     identifyVideos: function(files) {
         var output = {};
+        files = typeof files === "object" ? files : [files];
         //console.info("identifying files %j",files);
         files.forEach(function(f) {
             //TODO filter filetype here

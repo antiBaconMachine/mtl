@@ -68,8 +68,11 @@ if (!argv.n && argv.p) {
 }
 
 function complete() {
-        var srcDir = path.dirname(source); 
-	//If there are no moves then just return the source directory 
+        var srcDir = source;
+        if(!fs.statSync(source).isDirectory()){
+             srcDir = path.dirname(source);
+         }
+        //If there are no moves then just return the source directory 
         //TODO at some point we may want to make a configurable default dir
         var outp = [srcDir];
         if (!_.isEmpty(ops.move)) {

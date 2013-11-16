@@ -103,7 +103,7 @@ describe("Move to library", function() {
 	});
         
         it("should match a single file to a target directory, new or exisiting", function() {
-            var ops = mtl.identifyDestinations(mtl.identifyVideos(["Doctor.Who.2005.7x12.Nightmare.In.Silver.HDTV.x264-FoV.mp4"]), outputDir);
+            var ops = mtl.identifyDestinations(mtl.identifyVideos("Doctor.Who.2005.7x12.Nightmare.In.Silver.HDTV.x264-FoV.mp4"), outputDir);
             expect(_.isEqual(ops.move,
             {
                 "Doctor Who (2005)" : [

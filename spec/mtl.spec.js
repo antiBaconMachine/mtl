@@ -23,6 +23,8 @@ describe("Move to library", function() {
 					"Mad.Men.S06E08.HDTV.x264-EVOLVE.mp4",
 					"Game.of.Thrones.S03E08.PROPER.HDTV.x264-2HD.mp4",
 					"Doctor.Who.2005.7x12.Nightmare.In.Silver.HDTV.x264-FoV.mp4",
+					"The.Test.Show.2012.10.08.Norman.Muster.HDTV.x264-EVOLVE.[VTV].mp4",
+					"The.Test.Report.2012.10.08.Judas.Ben.HDTV.x264-EVOLVE.[VTV].mp4",
 					"NotAvideo.txt",
 					"video_wthout_tags.mp4"]
 
@@ -57,9 +59,17 @@ describe("Move to library", function() {
 		"Doctor Who (2005)" : [
 					"Doctor.Who.2005.7x12.Nightmare.In.Silver.HDTV.x264-FoV.mp4",
 		],
-                'Game of Thrones': [ 'Game.of.Thrones.S03E08.PROPER.HDTV.x264-2HD.mp4' ]
+        'Game of Thrones': [ 
+                    'Game.of.Thrones.S03E08.PROPER.HDTV.x264-2HD.mp4',
+        ],
+        'The Test Show' : [
+                    "The.Test.Show.2012.10.08.Norman.Muster.HDTV.x264-EVOLVE.[VTV].mp4",
+        ],
+        'The Test Report' : [
+                    'The.Test.Report.2012.10.08.Judas.Ben.HDTV.x264-EVOLVE.[VTV].mp4',
+        ],
 	};
-	var createDirs = ['Chuck', 'Game of Thrones'];
+	var createDirs = [ 'Chuck', 'Game of Thrones', 'The Test Show', 'The Test Report' ];
 
 	it("should correctly identify tagged videos", function() {
 		var vids = _.keys(mtl.identifyVideos(inputDir)).sort();
@@ -93,7 +103,7 @@ describe("Move to library", function() {
 	});
         
         it("should match a single file to a target directory, new or exisiting", function() {
-            var ops = mtl.identifyDestinations(mtl.identifyVideos("Doctor.Who.2005.7x12.Nightmare.In.Silver.HDTV.x264-FoV.mp4"), outputDir);
+            var ops = mtl.identifyDestinations(mtl.identifyVideos(["Doctor.Who.2005.7x12.Nightmare.In.Silver.HDTV.x264-FoV.mp4"]), outputDir);
             expect(_.isEqual(ops.move,
             {
                 "Doctor Who (2005)" : [

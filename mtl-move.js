@@ -34,9 +34,13 @@ var argv = require("optimist").
                                 },
 				'source' : {
 					alias : "s",
-					demand : true,
-					describe : "source dir"
+					describe : "source dir, defaults to current directory"
 				},
+                'recursive' : {
+                    alias: 'r',
+                    describe: 'recursively search for videos',
+                    default: false
+                },
 				'update-xbmc' : {
 					alias : 'x',
 					describe : 'url of xbmc remote interface to tirgger update of lib'
@@ -51,7 +55,7 @@ if (argv.rtorrent) {
 }
 
 //Source may be a directory or a single file
-var source = argv.source;
+var source = path.resolve(argv.source || process.cwd());
 var dest = argv.destination;
 var ops = mtl.getOps(source, dest);
 if (!argv.quiet) console.info(ops);

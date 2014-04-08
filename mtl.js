@@ -155,13 +155,23 @@ var mtl = {
             return fs.statSync(path.join(target, f)).isDirectory();
         });
     },
-    getFiles: function(source) {
+    getFiles: function(source, recursive, acc) {
+        acc = acc || [];
         if (fs.statSync(source).isFile()) {
-            return [path.basename(source)];
-        } 
-        return _.filter(fs.readdirSync(source), function(f) {
-            return fs.statSync(path.join(source, f)).isFile();
-        });
+            console.log('got file');
+            acc.push(source);
+        } else {
+            _.each(fs.readdirSync(source), function (f) {
+                var filePath = path.join(source, f);
+                var p = fs.statSync(filePath);
+                if (p.isFile()) {
+                    acc.push(filePath);
+                } else if (recursive && p.isDirectory()) {
+                    acc = mtl.getFiles(filePath, recursive, acc);
+                }
+            });
+        }
+        return acc;
     }
 };
 module.exports = mtl;

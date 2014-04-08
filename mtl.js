@@ -27,9 +27,14 @@ var getMatchTitle = function(title) {
 /**
  *Get a nice clean name your grandma would be happy to use as a directory name.
  *allows ()
+ *converts 'foo, the' to 'the foo'
  */
-var getDirTitle = function(title) {
-    return title.split(/[^a-zA-Z0-9\(\)]+/g).join(" ");
+var getCleanTitle = function(inp) {
+    var title = inp.split(/[^a-zA-Z0-9\(\),]+/g).join(" ").trim();
+    if (title.substr(title.length - 5).match(/, the/i)) {
+        title = title.replace(/([^,]+),\W?(the)/i, '$2 $1');
+    }
+    return title;
 }
 
 var mtl = {
@@ -83,7 +88,7 @@ var mtl = {
                 var match = p.exec(baseName);
                 if (match != null) {
                     output[f] = {
-                        title: match[1],
+                        title: getCleanTitle(match[1]),
                         season: match[2],
                         episode: match[3],
                         format: match[4]
@@ -92,7 +97,7 @@ var mtl = {
                 }
             });
         });
-        //console.info(output);
+        console.info("identified videos: %j", output);
         return output;
     },
     /**
@@ -121,7 +126,7 @@ var mtl = {
                 }
             }
             if (!dirName) {
-                dirName = getDirTitle(meta.title);
+                dirName = meta.title;
                 if (createDirs.indexOf(dirName) < 0) {
                     createDirs.push(dirName);
                 }

@@ -22,16 +22,16 @@ var argv = require("optimist").
 					default : true,
 					describe : "perform required ops without prompting"
 				},
-                                'quiet' : {
-                                    alias : 'q',
-                                    describe : "less output",
-                                    default : false
-                                },
-                                'rtorrent' : {
-                                    alias : 'r',
-                                    describe : 'echo the new dir of a  moved file to stdout. Only makes sense with a single file and no prompt. implies quiet and no prompt',
-                                    default : false
-                                },
+                'quiet' : {
+                    alias : 'q',
+                    describe : "less output",
+                    default : false
+                },
+                'rtorrent' : {
+                    alias : 't',
+                    describe : 'echo the new dir of a  moved file to stdout. Only makes sense with a single file and no prompt. implies quiet and no prompt',
+                    default : false
+                },
 				'source' : {
 					alias : "s",
 					describe : "source dir, defaults to current directory"
@@ -43,7 +43,7 @@ var argv = require("optimist").
                 },
 				'update-xbmc' : {
 					alias : 'x',
-					describe : 'url of xbmc remote interface to tirgger update of lib'
+					describe : 'url of xbmc remote interface to trigger update of lib'
 				}
                                 
 			}).
@@ -57,7 +57,7 @@ if (argv.rtorrent) {
 //Source may be a directory or a single file
 var source = path.resolve(argv.source || process.cwd());
 var dest = argv.destination;
-var ops = mtl.getOps(source, dest);
+var ops = mtl.getOps(source, dest, argv.recursive);
 if (!argv.quiet) console.info(ops);
 if (!argv.n && argv.p) {
 	ask("proceed?", /(y|n)/i, function(resp) {

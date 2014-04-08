@@ -33,10 +33,10 @@ var getDirTitle = function(title) {
 }
 
 var mtl = {
-    getOps: function(source, target) {
+    getOps: function(source, target, recursive) {
         
         return mtl.identifyDestinations(
-                mtl.identifyVideos(mtl.getFiles(source)),
+                mtl.identifyVideos(mtl.getFiles(source, recursive)),
                 mtl.getDirs(target));
     },
     doMoves: function(source, target, ops, dry) {
@@ -53,12 +53,15 @@ var mtl = {
             var files = ops[dir];
             //console.info("file: %j from ops %j with key %s", files, ops, dir);
             files.forEach(function(file) {
-                var sourcePath = path.join(source, file);
-                var destPath = path.join(dirPath, file);
+                var sourcePath = file;
+                var destPath = path.join(dirPath, path.basename(file));
                 if (fs.existsSync(destPath)) {
                     //console.warn("%s exists, skipping", destPath);
                 } else {
-                    if (!dry) fs.renameSync(sourcePath, destPath);
+                    if (!dry) {
+                        fs.renameSync(sourcePath, destPath);
+                        //TODO: optionaly hard link instead
+                    }
                 }
             });
         }
@@ -74,9 +77,10 @@ var mtl = {
         files = typeof files === "object" ? files : [files];
         //console.info("identifying files %j",files);
         files.forEach(function(f) {
+            var baseName = path.basename(f);
             //TODO filter filetype here
             PATTERNS.forEach(function(p) {
-                var match = p.exec(f);
+                var match = p.exec(baseName);
                 if (match != null) {
                     output[f] = {
                         title: match[1],
@@ -152,27 +156,35 @@ var mtl = {
     },
     getDirs: function(target) {
         return  _.filter(fs.readdirSync(target), function(f) {
-            return fs.statSync(path.join(target, f)).isDirectory();
+            try {
+                return fs.statSync(path.join(target, f)).isDirectory();
+            } catch (e) {
+                console.warn(e);
+                return false;
+            }
         });
     },
     getFiles: function(source, recursive, acc) {
         acc = acc || [];
         if (fs.statSync(source).isFile()) {
-            console.log('got file');
             acc.push(source);
         } else {
             _.each(fs.readdirSync(source), function (f) {
-                var filePath = path.join(source, f);
-                var p = fs.statSync(filePath);
-                if (p.isFile()) {
-                    acc.push(filePath);
-                } else if (recursive && p.isDirectory()) {
-                    acc = mtl.getFiles(filePath, recursive, acc);
+                try {
+                    var filePath = path.join(source, f);
+                    var p = fs.statSync(filePath);
+                    if (p.isFile()) {
+                        acc.push(filePath);
+                    } else if (recursive && p.isDirectory()) {
+                        acc = mtl.getFiles(filePath, recursive, acc);
+                    }
+                } catch (e) {
+                    console.warn(e);
                 }
             });
         }
+        //console.log('get files %j', acc);
         return acc;
     }
 };
 module.exports = mtl;
-

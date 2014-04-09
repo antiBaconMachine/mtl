@@ -96,7 +96,7 @@ var mtl = {
                 }
             });
         });
-        console.info("identified videos: %j", output);
+        //console.info("identified videos: %j", output);
         return output;
     },
     /**

@@ -19,16 +19,25 @@ var argv = require("optimist").
         alias: "source",
         demand: true,
         describe: "Source filename"
+    },
+    'c': {
+        alias: 'create',
+        default: false,
+        describe: 'Automatically create missing directories'
     }
-}).
-        argv;
+
+}).argv;
 
 var source = argv.source;
 var dest = argv.destination;
 var ops = mtl.getOps(source, dest);
-//console.info("video array: %j",vids);
-var outp = path.dirName(source);
-if (!_.isEmpty(ops.move)) {
-    outp = mtl.doMoves(path.dirname(source), dest, ops.move)[0];
+if (argv.create && !_.isEmpty(ops.create)) {
+    fs.mkdirSync(path.resolve(dest, ops.create[0]));
 }
-console.log(outp);
+var keys = _.keys(ops.move);
+if (keys.length) {
+    var filePath = path.resolve(dest, keys[0]);
+    if (fs.existsSync(filePath)) {
+        console.log(filePath);
+    }
+}

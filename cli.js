@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-var AVAILABLE_SCRIPTS=["move","xbmc","target"];
+var AVAILABLE_SCRIPTS=["move","update-xbmc","target"];
 
 var argv = require("optimist").
         usage("mtl cmd").

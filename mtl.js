@@ -15,7 +15,7 @@ var getRegex = function(title) {
         regexes[title] = r;
     }
     return r;
-}
+};
 var getMatchTitle = function(title) {
     var m = matchTitles[title];
     if (!m) {
@@ -23,7 +23,7 @@ var getMatchTitle = function(title) {
         matchTitles[title] = m;
     }
     return m;
-}
+};
 /**
  *Get a nice clean name your grandma would be happy to use as a directory name.
  *allows ()
@@ -35,8 +35,7 @@ var getCleanTitle = function(inp) {
         title = title.replace(/([^,]+),\W?(the)/i, '$2 $1');
     }
     return title;
-}
-
+};
 var mtl = {
     getOps: function(source, target, recursive) {
         

@@ -50,7 +50,7 @@ var mtl = {
         for (var dir in operations) {
             var dirPath = path.join(target, dir);
             newDirs.push(dirPath);
-            if (!argv.n && !fs.existsSync(dirPath)) {
+            if (!args.n && !fs.existsSync(dirPath)) {
                 //console.info("Creating directory: %s", dirPath);
                 fs.mkdirSync(dirPath);
             }

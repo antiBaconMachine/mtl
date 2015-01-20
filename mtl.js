@@ -43,18 +43,18 @@ var mtl = {
                 mtl.identifyVideos(mtl.getFiles(source, recursive)),
                 mtl.getDirs(target));
     },
-    doMoves: function(source, target, ops, dry) {
-        if (!ops)
+    doMoves: function(source, target, operations, args) {
+        if (!operations)
             throw "no ops provided";
         var newDirs = [];
-        for (var dir in ops) {
+        for (var dir in operations) {
             var dirPath = path.join(target, dir);
             newDirs.push(dirPath);
             if (!dry && !fs.existsSync(dirPath)) {
                 //console.info("Creating directory: %s", dirPath);
                 fs.mkdirSync(dirPath);
             }
-            var files = ops[dir];
+            var files = operations[dir];
             //console.info("file: %j from ops %j with key %s", files, ops, dir);
             files.forEach(function(file) {
                 var sourcePath = file;
@@ -62,9 +62,12 @@ var mtl = {
                 if (fs.existsSync(destPath)) {
                     //console.warn("%s exists, skipping", destPath);
                 } else {
-                    if (!dry) {
-                        fs.renameSync(sourcePath, destPath);
-                        //TODO: optionaly hard link instead
+                    if (!args.n) {
+                        if (args.l) {
+                            fs.linkSync(sourcePath, destPath);
+                        } else {
+                            fs.renameSync(sourcePath, destPath);
+                        }
                     }
                 }
             });

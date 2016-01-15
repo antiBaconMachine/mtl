@@ -163,6 +163,47 @@ var mtl = {
                     cb();
             });
     },
+    refreshPlex: function (base_url, cb) {
+        url = base_url + "/library/sections";
+        request.get({
+            url: url,
+            headers: {
+                'Accept': 'application/json',
+            }
+        }).on('response', function (response) {
+                response.on('data', function (data) {
+                        var sections = JSON.parse(data)._children;
+                        var sections_count = 0;
+                        var count = 0;
+                        _.each(sections, function (section) {
+                            if (section.type == 'show') {
+                                sections_count++;
+                                scan_url = base_url + '/library/sections/' + section.key + '/refresh';
+                                request.get({
+                                    url: scan_url,
+                                }).on('response', function (response) {
+                                    count++;
+                                    if(count == sections_count && cb){
+                                            cb();
+                                    }
+                                }).on('error', function (err) {
+                                    console.error("Plex update failed with error %s", err);
+                                    console.error(err);
+                                    count++;
+                                    if(count == sections_count && cb){
+                                        cb();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                )
+            }
+        ).on('error', function (err){
+                console.error("Plex update failed with error %s", err);
+                console.error(err);
+            });
+    },
     getDirs: function (target) {
         return _.filter(fs.readdirSync(target), function (f) {
             try {

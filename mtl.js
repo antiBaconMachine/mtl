@@ -89,8 +89,7 @@ var mtl = {
             //TODO filter filetype here
             PATTERNS.forEach(function (p) {
                 var match = p.exec(baseName);
-                var extension = _.last(match).toLowerCase();
-                if (match != null && _.indexOf(EXTENSIONS, extension) != -1) {
+                if (match != null && _.indexOf(EXTENSIONS, _.last(match).toLowerCase()) != -1) {
                     output[f] = {
                         title: getCleanTitle(match[1]),
                         season: match[2],

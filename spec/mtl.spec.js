@@ -26,11 +26,16 @@ describe("Move to library", function() {
 					"The.Test.Show.2012.10.08.Norman.Muster.HDTV.x264-EVOLVE.[VTV].mp4",
 					"The.Test.Report.2012.10.08.Judas.Ben.HDTV.x264-EVOLVE.[VTV].mp4",
 					"NotAvideo.txt",
-					"video_wthout_tags.mp4"]
+					"video_wthout_tags.mp4",
+					"The.Test.Show.2012.10.08.Norman.Muster.HDTV.x264-EVOLVE.[VTV].txt",
+					"Chuck S03xE11.nfo",
+					"Chuck S03xE11.sub",
+					"Chuck S03xE11.rar",
+	]
 
 	var outputDir = ["Community", "Mad Men","Doctor Who (2005)"];
 
-	var validVideos = inputDir.slice(0, inputDir.length-2).sort();
+	var validVideos = inputDir.slice(0, inputDir.length-6).sort();
 	var moves = {
 		"Chuck" : [
 					"Chuck 3x7.wmv",
